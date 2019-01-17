@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+
+    <!--FB-aplikaatio löytyy täältä: https://apps.facebook.com/2107975749518736-->
+
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <title>Facebook</title>
+</head>
+
+<body>
+  <script>
+    // This is called with the results from from FB.getLoginStatus().
+    function statusChangeCallback(response) {
+      // The response object is returned with a status field that lets the
+      // app know the current login status of the person.
+      // Full docs on the response object can be found in the documentation
+      // for FB.getLoginStatus().
+      if (response.status === 'connected') {
+        // Logged into your app and Facebook.
+        testAPI();
+      }
+      else {
+        // The person is not logged into your app or we are unable to tell.
+
+        FB.login(function(response) {
+          if (response.authResponse) {
+            testAPI();
+            console.log('Welcom! Fetching your information.... ');
+            FB.api('/me?fields=gender,locale, hometown', function(response) {
+              console.log('Good to see you, ' + response.gender + '.');
+            });
+          }
+          else {
+            console.log('User cancelled login or did not fully authorize.');
+          }
+        }, { scope: 'public_profile, email, user_gender, user_hometown, user_age_range' });
+      }
+    }
+
+    // This function is called when someone finishes with the Login
+    // Button.  See the onlogin handler attached to it in the sample
+    // code below.
+    function checkLoginState() {
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+    }
+
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId: '2107975749518736',
+        cookie: true, // enable cookies to allow the server to access 
+        // the session
+        xfbml: true, // parse social plugins on this page
+        version: 'v3.2' // use graph api version 3.2
+      });
+
+      // Now that we've initialized the JavaScript SDK, we call 
+      // FB.getLoginStatus().  This function gets the state of the
+      // person visiting this page and can return one of three states to
+      // the callback you provide.  They can be:
+      //
+      // 1. Logged into your app ('connected')
+      // 2. Logged into Facebook, but not your app ('not_authorized')
+      // 3. Not logged into Facebook and can't tell if they are logged into
+      //    your app or not.
+      //
+      // These three cases are handled in the callback function.
+
+      FB.getLoginStatus(function(response) {
+        statusChangeCallback(response);
+      });
+
+    };
+
+    // Load the SDK asynchronously
+    (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    // Here we run a very simple test of the Graph API after login is
+    // successful.  See statusChangeCallback() for when this call is made.
+    function testAPI() {
+      console.log('Welcome!  Fetching your information.... ');
+
+      FB.api('/me?fields=id, name, first_name, last_name', function(response) {
+        console.log('Successful login for: ' + response.name);
+        console.log(response.first_name);
+        console.log(response.last_name);
+        console.log(response.id);
+        //tallenetaan nimi kenttään, missä id="fullname"
+        document.getElementById("fullname").innerHTML = response.name;
+
+        document.getElementById("firstname").innerHTML = response.first_name;
+        document.getElementById("lastname").innerHTML = response.last_name;
+      });
+
+      FB.api('/me?fields=gender, picture', function(response){
+        console.log(response.gender);
+        document.getElementById("gender").innerHTML = response.gender;
+
+        console.log(response.picture.data.url);
+        document.getElementById("image").src = response.picture.data.url;
+      });
+
+      FB.api('/me?fields=hometown, email, age_range', function(response){
+        console.log(response.hometown);
+        document.getElementById("hometown").innerHTML = response.hometown.name;
+        
+        console.log(response.email);
+        document.getElementById("email").innerHTML = response.email;
+        
+        console.log(response.age_range);
+        document.getElementById("agerange").innerHTML = response.age_range.min + "+";
+      });
+    }
+  </script>
+<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+  <h1 id="status">Facebook-sovellusharjoitus</h1>
+  <h3>Haetaan käyttäjän tietoja</h3>
+  <p>Name: <span id="fullname" />Unknown</p>
+  <p>Firstname: <span id="firstname" />Unknown</p>
+  <p>Lastname: <span id="lastname" />Unknown</p>
+  <p>User picture <img id="image" /></p>
+  <p>Gender <span id="gender" />Unknown</p>
+  <p>Hometown <span id="hometown" />Unknown</p>
+  <p>Email <span id="email" />Unknown</p>
+  <p>Age range: <span id="agerange" /></p>
+  <p>Friends list:
+    <div id="friendslist">
+      -Unknown
+    </div>
+  </p>
+
+	<h3>Tässä muutama nappula</h3>
+				<p><button id="share">Jaa tämä sovellus</button></p>
+				<p><button id="share2">Lammas jaettavaksi iloksi</button></p>
+				<p><button id="send">Aloita keskustelu</button></p>
+			</div>
+		</div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    <script>
+        $(document).ready(function() {
+    	    
+    	  var connected = false;
+    	    
+    	  $.ajaxSetup({ cache: true });
+    	  $.getScript('//connect.facebook.net/en_US/sdk.js', function(){
+    		FB.init({
+    		  appId: '2107975749518736',
+    		  version: 'v3.2' // or v2.1, v2.2, v2.3, ...
+    		});     
+    		
+    		// // ADD ADDITIONAL FACEBOOK CODE HERE
+    		// function onLogin(response) {
+      //           FB.api('/me?fields=first_name', function(data) {
+      //             var welcomeBlock = document.getElementById('fb-welcome');
+      //               welcomeBlock.innerHTML = 'Hello, ' + data.first_name + '!';
+      //           });
+                
+      //           connected = true;
+    		// }
+    
+    		FB.getLoginStatus(function(response) {
+    			// Check login status on load, and if the user is
+    			// already logged in, go directly to the welcome message.
+    			if (response.status == 'connected') {
+    				onLogin(response);
+    			} else {
+    				// Otherwise, show Login dialog first.
+    				FB.login(function(response) {
+    				onLogin(response);
+    				}, {scope: 'user_friends, email'});
+    			}
+    		});
+    
+    	  });
+		  
+		  // click share button
+		  
+		  $("#share").click(function() {
+		  	console.log("Share dialog");
+		  	
+		  	FB.ui({
+			  method: 'share',
+			  href: 'https://apps.facebook.com/2107975749518736',
+			  hashtag: '#huippujuttu',
+			  quote: 'Kyllä, tämä sovellus kannattaa jakaa muillekin.',
+			}, function(response){
+				console.log(response);
+				
+			});
+		  	});
+		 // share2
+		 $('#share2').click(function() {
+		 	
+		 	var url = 'https://apps.facebook.com/2107975749518736';
+		 	var title = 'Lammassovellus';
+		 	var des = 'Ihana lammaskuva ja appi jaettavaksi';
+		 	var img = 'https://somedialogi-liisaoja.c9users.io/sheep.jpg';
+		 	
+		 	FB.ui({
+		 		method: 'share_open_graph',
+		 		action_type: 'og.likes',
+		 		action_properties: JSON.stringify({
+		 			object: {
+		 				'og:url': url,
+		 				'og:title': title,
+		 				'og:description': des,
+		 				'og:image':img,
+		 			}
+		 		})
+		 	},
+		 	function(response){
+		 		//Action after response
+		 		console.log(response);
+		 	});
+		 	
+		 		
+		 	});
+		 	
+		 	
+		 	
+		 	$("#send").click(function(){
+		 		console.log("send dialog");
+		 		FB.ui({
+				  method: 'send',
+				  link: 'https://apps.facebook.com/2107975749518736',
+				}, function(r) {
+					if(r.success == true)
+					console.log("Message was sent succesfully");
+				});
+		 	});
+		 	
+		 });
+		  
+    </script>
+  
+  
+  
+  
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  
+  <script>
+    $(document).ready(function(){
+      console.log("jQuery toimii");
+    });
+  </script>
+</body>
+
+</html>

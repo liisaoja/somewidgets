@@ -1,0 +1,55 @@
+<!--Message Us plugari SapuskaKori -verkkopalveluprojektiin-->
+
+
+
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <title>Message Us</title>
+</head>
+
+<body>
+    <script>
+window.fbAsyncInit = function() {
+FB.init({
+appId : '512919645784172',
+autoLogAppEvents : true,
+xfbml : true,
+version : 'v3.2'
+});
+};
+
+(function(d, s, id){
+var js, fjs = d.getElementsByTagName(s)[0];
+if (d.getElementById(id)) {return;}
+js = d.createElement(s); js.id = id;
+js.src = "https://connect.facebook.net/en_US/sdk.js";
+fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<h3>Ota yhteyttä Messengerillä:</h3>
+
+<div class="fb-messengermessageus" 
+messenger_app_id="512919645784172" 
+page_id="737093823322188"
+color="white"
+size="xlarge">
+
+</div>
+    
+    
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  
+  <script>
+    $(document).ready(function(){
+      console.log("jQuery toimii");
+    });
+  </script>
+</body>
+
+</html>
